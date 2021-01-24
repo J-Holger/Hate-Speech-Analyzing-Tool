@@ -6,25 +6,39 @@ import re
 
 class HateSpeechAnalyser:
 
-    def __init__(self):
+    def __init__(self, data_directory_path=None, metadata_directory_path=None):
         self.data = pd.DataFrame()
         self.metadata = pd.DataFrame()
         self.compiled_regex = None
-        
-    def load_json(self, data_directory_path, metadata_directory_path):
+        self.data_directory_path = data_directory_path
+        self.metadata_directory_path = metadata_directory_path
+
+
+    def load_json(self, data_directory_path=None,
+                  metadata_directory_path=None):
+
         self.load_data_json(data_directory_path)
         self.load_metadata_json(metadata_directory_path)
         
         
-    def load_data_json(self, data_directory_path):
+    def load_data_json(self, data_directory_path=None):
+        if self.data_directory_path is None:
+            self.data_directory_path = data_directory_path
+        else:
+            data_directory_path = self.data_directory_path
+
         file_names = [f for f in os.listdir(data_directory_path) 
                       if os.path.isfile(os.path.join(data_directory_path, f))]   
         for fn in file_names:
             self.__load_data_json_file(data_directory_path + fn)
             
 
-            
-    def load_metadata_json(self, metadata_directory_path):
+    def load_metadata_json(self, metadata_directory_path=None):
+        if self.metadata_directory_path is None:
+            self.metadata_directory_path = metadata_directory_path
+        else:
+            metadata_directory_path = self.metadata_directory_path
+
         file_names = [f for f in os.listdir(metadata_directory_path) 
                       if os.path.isfile(os.path.join(metadata_directory_path, f))]    
         for fn in file_names:
@@ -164,8 +178,19 @@ class HateSpeechAnalyser:
         
         
     def write_csv(self):
-        current_path = os.getcwd()
-        self.data.to_csv(current_path + '\\data')
+        self.write_data_csv()
+        self.write_metadata_csv()
+
+    def write_data_csv(self):
+        path = self.data_directory_path[:-5]
+        print('Path to write csv to is: ', path + 'data.csv')
+        self.data.to_csv(path + 'data.csv')
+
+    def write_metadata_csv(self):
+        path = self.metadata_directory_path[:-9]
+        print('Path to write csv to is: ', path + 'metadata.csv')
+        self.metadata.to_csv(path + 'metadata.csv')
+
             
             
 
