@@ -124,8 +124,8 @@ class RedditDataDL:
         Then loads the reddit data with json library and decodes it to a string."""
 
         request_data = requests.get(self.__url())
-        retrieved_reddit_data = json.loads(request_data.text)
         request_data.raise_for_status()
+        retrieved_reddit_data = json.loads(request_data.text)
         return retrieved_reddit_data
 
 
