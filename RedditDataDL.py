@@ -125,8 +125,7 @@ class RedditDataDL:
 
         request_data = requests.get(self.__url())
         retrieved_reddit_data = json.loads(request_data.text)
-        # Here a line should be added to check if the retrieval was successful
-        # with help of status message.
+        request_data.raise_for_status()
         return retrieved_reddit_data
 
 
