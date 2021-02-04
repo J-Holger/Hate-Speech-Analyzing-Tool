@@ -136,6 +136,7 @@ class RedditDataDL:
         and reruns until all the data is collected. The json file has a first attribute "reddit_data" and its associated
         value is a list containing all the retrieved reddit data."""
 
+        print('Started download from: ', self.subreddit, '. \n')
         reddit_data = self.__retrieve_reddit_data() # Use the class method to request reddit data and load it with json
         after_holder = self.after # Holder to keep track of the original after-input.
 
@@ -162,7 +163,7 @@ class RedditDataDL:
         self.after = after_holder
         self.is_data_saved = True
 
-        print('Data is successfully saved.')
+        print('Download from: ', self.subreddit, ' finished. \n')
         return data_directory, metadata_directory
 
 
