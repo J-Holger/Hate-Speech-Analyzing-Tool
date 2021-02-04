@@ -131,9 +131,7 @@ class HateSpeechAnalyzer:
                                         
         for index, row in self.data.iterrows():
 
-            if index in droplist: continue  # This check is required because of
-                                            # how some of the methods in the loop
-                                            # works.
+            if index in droplist: continue
             
             if remove_duplicates:
                 i_to_drop = self.__remove_duplicates(index, row, column)
@@ -247,17 +245,20 @@ class HateSpeechAnalyzer:
         
     def __remove_duplicates(self, index, row, column):                
         droplist = []
-        end_of_df = self.data.shape[0]
+        end_of_df_index = self.data.shape[0] - 1
         dup_index = index + 1
-        if dup_index == end_of_df: return False
+
+        if dup_index == end_of_df_index: return False
+
         str1 = row[column]
         str2 = self.data.loc[dup_index].at[column]
-        while ( (dup_index < end_of_df) and (str1 == str2) ):
+        while ( (dup_index < end_of_df_index) and (str1 == str2) ):
             droplist.append(dup_index)
             dup_index += 1
             str2 = self.data.loc[dup_index].at[column]
                         
         if droplist: return droplist
+
         return False        
         
 
