@@ -292,7 +292,7 @@ class HateSpeechAnalyzer:
         with open(file_path, 'r') as json_data:
             d = json.load(json_data)
             d = pd.json_normalize(d)
-            self.data = self.data.append(d, ignore_index=True)
+            self.data = self.data.append(d)
             
 
 
@@ -301,7 +301,7 @@ class HateSpeechAnalyzer:
         with open(file_path, 'r') as json_data:
             md = json.load(json_data)
             md = pd.json_normalize(md)
-            self.metadata = self.metadata.append(md, ignore_index=True)
+            self.metadata = self.metadata.append(md)
 
 
 
