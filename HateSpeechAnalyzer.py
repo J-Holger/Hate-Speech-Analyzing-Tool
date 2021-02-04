@@ -63,9 +63,13 @@ class HateSpeechAnalyzer:
             data_directory_path = self.data_directory_path
 
         file_names = [f for f in os.listdir(data_directory_path) 
-                      if os.path.isfile(os.path.join(data_directory_path, f))]   
+                      if os.path.isfile(os.path.join(data_directory_path, f))]
+        dfs = list()
         for fn in file_names:
-            self.__load_data_json_file(data_directory_path + fn)
+            path = data_directory_path + fn
+            dfs.append( self.__load_data_json_file( path ) )
+
+        self.data = pd.concat(dfs, ignore_index=True, copy=False)
         print('Data successfully loaded into HateSpeechAnalyzer. \n')
             
 
@@ -86,9 +90,14 @@ class HateSpeechAnalyzer:
             metadata_directory_path = self.metadata_directory_path
 
         file_names = [f for f in os.listdir(metadata_directory_path) 
-                      if os.path.isfile(os.path.join(metadata_directory_path, f))]    
+                      if os.path.isfile(os.path.join(metadata_directory_path, f))]
+
+        dfs = list()
         for fn in file_names:
-            self.__load_metadata_json_file(metadata_directory_path + fn)
+            path = metadata_directory_path + fn
+            dfs.append( self.__load_metadata_json_file( path ) )
+
+        self.metadata = pd.concat(dfs, ignore_index=True, copy=False)
         print('Metadata successfully loaded into HateSpeechAnalyzer. \n')
         
             
@@ -248,7 +257,7 @@ class HateSpeechAnalyzer:
         end_of_df_index = self.data.shape[0] - 1
         dup_index = index + 1
 
-        if dup_index == end_of_df_index: return False
+        if dup_index >= end_of_df_index: return False
 
         str1 = row[column]
         str2 = self.data.loc[dup_index].at[column]
@@ -292,7 +301,7 @@ class HateSpeechAnalyzer:
         with open(file_path, 'r') as json_data:
             d = json.load(json_data)
             d = pd.json_normalize(d)
-            self.data = self.data.append(d)
+            return d
             
 
 
@@ -300,4 +309,4 @@ class HateSpeechAnalyzer:
         with open(file_path, 'r') as json_data:
             md = json.load(json_data)
             md = pd.json_normalize(md)
-            self.metadata = self.metadata.append(md)
+            return md
