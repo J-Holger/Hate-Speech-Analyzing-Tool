@@ -56,7 +56,7 @@ class HateSpeechAnalyzer:
 
         """
 
-        print('Loading data...')
+        print('Loading data into HateSpeechAnalyzer... \n')
         if self.data_directory_path is None:
             self.data_directory_path = data_directory_path
         else:
@@ -66,7 +66,7 @@ class HateSpeechAnalyzer:
                       if os.path.isfile(os.path.join(data_directory_path, f))]   
         for fn in file_names:
             self.__load_data_json_file(data_directory_path + fn)
-        print('Data successfully loaded into HateSpeechAnalyzer.')
+        print('Data successfully loaded into HateSpeechAnalyzer. \n')
             
 
 
@@ -79,7 +79,7 @@ class HateSpeechAnalyzer:
 
         """
 
-        print('Loading metadata...')
+        print('Loading metadata into HateSpeechAnalyzer... \n')
         if self.metadata_directory_path is None:
             self.metadata_directory_path = metadata_directory_path
         else:
@@ -89,7 +89,7 @@ class HateSpeechAnalyzer:
                       if os.path.isfile(os.path.join(metadata_directory_path, f))]    
         for fn in file_names:
             self.__load_metadata_json_file(metadata_directory_path + fn)
-        print('Metadata successfully loaded into HateSpeechAnalyzer.')
+        print('Metadata successfully loaded into HateSpeechAnalyzer. \n')
         
             
 
@@ -117,7 +117,7 @@ class HateSpeechAnalyzer:
                                               regex=regex_input)
         """
 
-        print('Cleaning ', column, '...')
+        print('Cleaning: ', column, ', in data... \n')
 
         removed_items = {'Data_orig_shape' : self.data.shape, # Record of removed items.
                          'Data_new_shape' : 0,
@@ -163,7 +163,7 @@ class HateSpeechAnalyzer:
         self.data.reset_index(inplace=True, drop=True)
         removed_items['Data_new_shape'] = self.data.shape
 
-        print('Cleaning of ', column, ' done.')
+        print('Cleaning of: ', column, ', done. \n')
         return removed_items
 
 
@@ -181,6 +181,7 @@ class HateSpeechAnalyzer:
         Example: a.hate_sonar('body')
         """
 
+        print('Running HateSonar on: ', column, ', in data... \n')
         sonar = hatesonar.Sonar()
         top_cls = list()
         hate_speech = list()
@@ -203,6 +204,7 @@ class HateSpeechAnalyzer:
         self.data["hate_speech"] = hate_speech
         self.data["offensive_language"] = offensive_lang
         self.data["neither"] = neither
+        print('HateSonar on: ', column, ', finished. \n')
 
 
 
@@ -226,7 +228,7 @@ class HateSpeechAnalyzer:
         """
 
         path = self.data_directory_path[:-5]
-        print('Path to write csv to is: ', path + 'data.csv')
+        print('Writing data to: ', path + 'data.csv \n')
         self.data.to_csv(path + 'data.csv')
 
 
@@ -238,7 +240,7 @@ class HateSpeechAnalyzer:
         Example: a.write_metadata_csv()"""
 
         path = self.metadata_directory_path[:-9]
-        print('Path to write csv to is: ', path + 'metadata.csv')
+        print('Writing metadata to: ', path + 'metadata.csv \n')
         self.metadata.to_csv(path + 'metadata.csv')
 
 
