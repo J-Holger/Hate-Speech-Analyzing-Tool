@@ -289,7 +289,6 @@ class HateSpeechAnalyzer:
 
     
     def __load_data_json_file(self, file_path):
-        self.__check_file_name(file_path, '.json')
         with open(file_path, 'r') as json_data:
             d = json.load(json_data)
             d = pd.json_normalize(d)
@@ -298,16 +297,7 @@ class HateSpeechAnalyzer:
 
 
     def __load_metadata_json_file(self, file_path):
-        self.__check_file_name(file_path, '.json')
         with open(file_path, 'r') as json_data:
             md = json.load(json_data)
             md = pd.json_normalize(md)
             self.metadata = self.metadata.append(md)
-
-
-
-    def __check_file_name(self, file_path, file_extension):
-        if file_path.endswith(file_extension): return
-        else:
-            raise Exception('The file you are trying to read with a load_..._json' +
-                            ' method is not a .json file!')
