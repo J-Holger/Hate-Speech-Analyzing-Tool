@@ -111,8 +111,8 @@ class HateSpeechAnalyzer:
 
         column takes the name of the column as a string.
 
-        disallowed takes a list of strings that should be removed:
-            comment_list = ['deleted', 'don't want this comment']
+        disallowed takes a set of strings that should be removed:
+            comment_list = {'deleted', 'don't want this comment'}
 
         regex takes a dictionary with form:
             {regex pattern : string to replace with}
@@ -128,7 +128,7 @@ class HateSpeechAnalyzer:
 
         print('Cleaning: ', column, ', in data... \n')
 
-        removed_items = {'Data_orig_shape' : self.data.shape, # Record of removed items.
+        removed_items = {'Data_orig_shape' : self.data.shape,
                          'Data_new_shape' : 0,
                          'Removed_NaN' : 0,
                          'Removed_dups' : 0,
@@ -268,7 +268,7 @@ class HateSpeechAnalyzer:
             dup_index += 1
 
             if dup_index > end_of_df_index: return droplist
-            
+
             str2 = self.data.loc[dup_index].at[column]
                         
         if droplist: return droplist
