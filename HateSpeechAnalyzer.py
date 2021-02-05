@@ -265,9 +265,10 @@ class HateSpeechAnalyzer:
         while (str1 == str2):
             droplist.append(dup_index)
 
-            if dup_index > end_of_df_index: return droplist
-
             dup_index += 1
+
+            if dup_index > end_of_df_index: return droplist
+            
             str2 = self.data.loc[dup_index].at[column]
                         
         if droplist: return droplist
