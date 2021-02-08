@@ -23,8 +23,7 @@ print( a.metadata.head() )
 print(a.data.shape)
 
 # Define a list of comments that you want removed.
-comment_list = {'[removed]', 'Your submission to /r/TheRedPill has been removed. **[DO NOT CONTACT MODS, WE WILL NOT REVERSE THIS DECISION](https://www.reddit.com/r/TheRedPill/comments/80kgg6/shit_to_avoid_saying_in_modmail/)** You have a new account with little karma. Please lurk and contribute more. **READ THE SIDEBAR**.\n\n*I am a bot, and this action was performed automatically. Please [contact the moderators of this subreddit](/message/compose/?to=/r/TheRedPill) if you have any questions or concerns.*',
-               '[deleted]', '_URL_'}
+comment_list = {'[removed]', '[deleted]', '_URL_'}
 
 # Define the regex expressions.
 regex_input = {r'@\w+' : '@USER ', # Replace a mention by @ with @User
