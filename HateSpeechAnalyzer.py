@@ -141,20 +141,23 @@ class HateSpeechAnalyzer:
         for index, row in self.data.iterrows():
 
             if index in droplist: continue
-            
+
             if remove_duplicates:
                 i_to_drop = self.__remove_duplicates(index, row, column)
                 if i_to_drop:
                     removed_items['Removed_dups'] += len(i_to_drop)
                     droplist.update(i_to_drop)
                     continue
-                    
+
             if remove_NaN: 
                 i_to_drop = self.__remove_NaN(index, row, column)
                 if i_to_drop:
                     removed_items['Removed_NaN'] += 1
                     droplist.add(i_to_drop)
                     continue
+
+            if regex is not None:
+                self.__apply_regex(index, row, column, regex)
                                                             
             if disallowed is not None:
                 i_to_drop = self.__remove_disallowed(index, row, column, disallowed)
@@ -162,10 +165,7 @@ class HateSpeechAnalyzer:
                     removed_items['Removed_disallowed'] += 1
                     droplist.add(i_to_drop)
                     continue
-                
-            if regex is not None:
-                self.__apply_regex(index, row, column, regex)
-        
+
         self.data.drop(droplist, inplace=True)
         self.data.reset_index(inplace=True, drop=True)
         removed_items['Data_new_shape'] = self.data.shape
