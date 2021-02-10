@@ -3,13 +3,11 @@ import RedditDataDL as rddl
 import pandas as pd
 
 # Initialize RedditDataDL with parameters according to https://github.com/pushshift/api
-#d = rddl.RedditDataDL(endpoint='comment', before="1609459200",
-#                               after="1577836800",subreddit='FemaleDatingStrategy')
+d = rddl.RedditDataDL(endpoint='comment', before="1609459200",
+                               after="1577836800",subreddit='FemaleDatingStrategy')
 
 # Download the Reddit data. Default is 500 posts per call.
-#data_dir, metadata_dir = d.get_data()
-data_dir = 'C:/Users/holge/my_projects/HateSpeechAnalyzingTool/data/TheRedPill_comment_1577836800_1609459200/data/'
-metadata_dir = 'C:/Users/holge/my_projects/HateSpeechAnalyzingTool/data/TheRedPill_comment_1577836800_1609459200/metadata/'
+data_dir, metadata_dir = d.get_data()
 
 
 # Initialize HateSpeechAnalyzer.
