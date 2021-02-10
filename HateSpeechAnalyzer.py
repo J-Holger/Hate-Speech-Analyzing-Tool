@@ -102,10 +102,10 @@ class HateSpeechAnalyzer:
         
             
 
-    def clean_data(self, column, disallowed=None, regex=None, remove_NaN=True, 
-                          remove_duplicates=True):
+    def clean_data(self, column, disallowed=None, remove_NaN=True,
+                   remove_duplicates=True):
 
-        """Cleans text data for all rows in the given column in the data
+        """Removes data rows in given column in the data
         DataFrame. All parameters are optional and independent. Returns a
         dictionary with the record of removed items.
 
@@ -113,10 +113,6 @@ class HateSpeechAnalyzer:
 
         disallowed takes a set of strings that should be removed:
             comment_list = {'deleted', 'don't want this comment'}
-
-        regex takes a dictionary with form:
-            {regex pattern : string to replace with}
-            regex_input = {r'http\S+' : '_URL_ '} # Replace a url with _URL_
 
         remove_NaN takes a boolean.
 
@@ -142,13 +138,6 @@ class HateSpeechAnalyzer:
 
             if index in droplist: continue
 
-            if remove_duplicates:
-                i_to_drop = self.__remove_duplicates(index, row, column)
-                if i_to_drop:
-                    removed_items['Removed_dups'] += len(i_to_drop)
-                    droplist.update(i_to_drop)
-                    continue
-
             if remove_NaN: 
                 i_to_drop = self.__remove_NaN(index, row, column)
                 if i_to_drop:
@@ -156,8 +145,12 @@ class HateSpeechAnalyzer:
                     droplist.add(i_to_drop)
                     continue
 
-            if regex is not None:
-                self.__apply_regex(index, row, column, regex)
+            if remove_duplicates:
+                i_to_drop = self.__remove_duplicates(index, row, column)
+                if i_to_drop:
+                    removed_items['Removed_dups'] += len(i_to_drop)
+                    droplist.update(i_to_drop)
+                    continue
                                                             
             if disallowed is not None:
                 i_to_drop = self.__remove_disallowed(index, row, column, disallowed)
@@ -172,6 +165,22 @@ class HateSpeechAnalyzer:
 
         print('Cleaning of: ', column, ', done. \n')
         return removed_items
+
+
+
+    def apply_regex(self, column, regex):
+        """Applies specified regex to all rows in the specified column.
+
+        regex takes a dictionary with form:
+            {regex pattern: string to replace with}
+
+        Example: regex_input = {r'http\S+': '_URL_ '}  # Replace a url with _URL_
+        """
+
+        print('Applying regex to: ', column, ' in data...')
+        for index, row in self.data.iterrows():
+            self.__apply_regex(index, row, column, regex)
+        print('Regex applied to rows on: ', column, 'column.')
 
 
 
