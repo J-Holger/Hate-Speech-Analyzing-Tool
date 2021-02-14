@@ -65,6 +65,15 @@ class RedditDataDL:
             return self.__download_reddit_data(data_path, metadata_path)
 
 
+    def get_paths(self):
+        """Returns the paths to the directories that the data and metadata are
+        going to be saved into."""
+
+        data_path = self.__make_path('data')
+        metadata_path = self.__make_path('metadata')
+        return data_path, metadata_path
+
+
 
     def __url(self):
         """Creates a callable URL depending on what parameters given in the
