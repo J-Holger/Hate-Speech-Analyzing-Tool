@@ -3,6 +3,8 @@ import pandas as pd
 import json
 import os
 import re
+import gensim
+import numpy as np
 
 class HateSpeechAnalyzer:
     """Class that loads text data and metadata into a pandas DataFrame. Currently
@@ -221,6 +223,39 @@ class HateSpeechAnalyzer:
         self.data["offensive_language"] = offensive_lang
         self.data["neither"] = neither
         print('HateSonar on: ', column, ', finished. \n')
+
+
+    def tf_idf(self, column):
+        """Calculates Term frequency - Inverse document frequency and word count
+        for all comments in the given column. Using the Gensim module. Returns
+        two Pandas DataFrames, one holding the TF-IDF results and one word count.
+
+        Example: freq_df, count_df = a.tf_idf('body')
+        """
+
+        # Join all strings to one long document
+        document = [' '.join( self.data[column] )]
+
+        # Convert document into a list of lowercase tokens, ignoring tokens
+        # that are too short or too long.
+        doc_tokenized = [gensim.utils.simple_preprocess(doc) for doc in document]
+
+        dictionary = gensim.corpora.Dictionary()
+
+        BoW_corpus = [dictionary.doc2bow(doc, allow_update=True) for
+                      doc in doc_tokenized]
+
+        tfidf = gensim.models.TfidfModel(BoW_corpus, smartirs='nfc')
+
+        for doc in tfidf[BoW_corpus]:
+            word_freq = [[dictionary[id], np.around(freq, decimals=3)] for id, freq in doc]
+
+        for doc in BoW_corpus:
+            word_count = [[dictionary[id], count] for id, count in doc]
+
+        freq_df = pd.DataFrame(word_freq, columns=['Word', 'Frequency'])
+        count_df = pd.DataFrame(word_count, columns=['Word', 'Count'])
+        return freq_df, count_df
 
 
 
