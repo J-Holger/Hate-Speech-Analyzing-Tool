@@ -164,9 +164,10 @@ class HateSpeechAnalyzer:
         self.data.drop(droplist, inplace=True)
         self.data.reset_index(inplace=True, drop=True)
         removed_items['Data_new_shape'] = self.data.shape
+        removed_items_df = pd.DataFrame(removed_items)
 
         print('Cleaning of: ', column, ', done. \n')
-        return removed_items
+        return removed_items_df
 
 
 
@@ -233,11 +234,12 @@ class HateSpeechAnalyzer:
         Example: freq_df, count_df = a.tf_idf('body')
         """
 
-        # Join all strings to one long document
+        print('Calculating TF-IDF for column: ', column)
+
+        # Built the TF-IDF matrix from a guide on tutorialspoint.
+        # https://www.tutorialspoint.com/gensim/gensim_creating_tf_idf_matrix.htm
         document = [' '.join( self.data[column] )]
 
-        # Convert document into a list of lowercase tokens, ignoring tokens
-        # that are too short or too long.
         doc_tokenized = [gensim.utils.simple_preprocess(doc) for doc in document]
 
         dictionary = gensim.corpora.Dictionary()
@@ -245,16 +247,19 @@ class HateSpeechAnalyzer:
         BoW_corpus = [dictionary.doc2bow(doc, allow_update=True) for
                       doc in doc_tokenized]
 
-        tfidf = gensim.models.TfidfModel(BoW_corpus, smartirs='nfc')
+        tfidf = gensim.models.TfidfModel(BoW_corpus, smartirs='ntc')
 
         for doc in tfidf[BoW_corpus]:
-            word_freq = [[dictionary[id], np.around(freq, decimals=3)] for id, freq in doc]
+            word_freq = [[dictionary[id], np.around(freq, decimals=3)] for
+                         id, freq in doc]
 
         for doc in BoW_corpus:
             word_count = [[dictionary[id], count] for id, count in doc]
 
         freq_df = pd.DataFrame(word_freq, columns=['Word', 'Frequency'])
         count_df = pd.DataFrame(word_count, columns=['Word', 'Count'])
+
+        print('TF-IDF done.')
         return freq_df, count_df
 
 
